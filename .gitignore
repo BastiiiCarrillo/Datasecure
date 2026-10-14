@@ -1,0 +1,39 @@
+# =============================================================================
+# DataSecure SpA - .gitignore de Ciberseguridad (INACAP CI3062)
+# =============================================================================
+# PROHIBIDO SUBIR SECRETOS REALES, BASES DE DATOS LOCALES O ARCHIVOS DE ENTORNO
+
+# Entornos virtuales de Python
+venv/
+env/
+.venv/
+ENV/
+
+# Archivos de caché y compilación
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Archivos de configuración con secretos y claves
+.env
+secretos.json
+config_local.py
+
+# Bases de datos locales (Seguridad de datos de prueba)
+*.db
+*.sqlite
+*.sqlite3
+datasecure.db
+database/datasecure.db
+
+# Logs del sistema
+*.log
+logs/
+
+# Archivos del sistema operativo e IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
