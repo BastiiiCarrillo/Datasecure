@@ -9,6 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+
 import database.db_manager as dbm
 import database.seed_data as seed
 from src.modulo_cripto import cifrar_aes256_gcm, descifrar_aes256_gcm
