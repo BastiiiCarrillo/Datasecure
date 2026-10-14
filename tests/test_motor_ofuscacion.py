@@ -20,6 +20,7 @@ CLAVE = "LabKey#2026"
 CLAVE_ERRONEA = "ClaveIncorrecta!"
 
 
+
 class TestTecnica1Sustitucion(unittest.TestCase):
     def test_ejemplo_del_enunciado(self):
         self.assertEqual(sustituir_caracteres("carlos"), "c@rl0s")
