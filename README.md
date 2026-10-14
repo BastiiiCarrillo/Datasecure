@@ -120,3 +120,24 @@ En estricto cumplimiento de los estándares de ciberseguridad:
   * Entornos virtuales (`venv/`) y cachés (`__pycache__/`).
 * Se provee `.env.example` con valores genéricos de muestra.
 * Las 10 cuentas de prueba son **100% ficticias** y diseñadas exclusivamente para laboratorio didáctico.
+
+---
+
+## 🌐 7. Despliegue en AlmaLinux (Arquitectura Distribuida)
+
+Para desplegar en el servidor Linux corporativo y permitir el acceso por red desde estaciones cliente:
+1. Clonar el repositorio en la máquina virtual AlmaLinux:
+   ```bash
+   git clone https://github.com/BastiiiCarrillo/Datasecure.git
+   cd Datasecure
+   ```
+2. Instalar dependencias y habilitar puerto 8501 en el firewall:
+   ```bash
+   pip3 install -r requirements.txt
+   sudo firewall-cmd --add-port=8501/tcp --permanent && sudo firewall-cmd --reload
+   ```
+3. Ejecutar el servidor web en modo red:
+   ```bash
+   python3 -m streamlit run app.py --server.address=0.0.0.0
+   ```
+4. Acceder desde cualquier navegador en la red local o equipo host mediante `http://<IP_ALMALINUX>:8501`.
