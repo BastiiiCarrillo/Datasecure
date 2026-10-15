@@ -2,7 +2,7 @@
 
 **Asignatura:** Seguridad en Redes (CI3062)  
 **Institución:** INACAP - Área Tecnologías de la Información y Ciberseguridad  
-**Evaluación:** Evaluación Sumativa N°2 (30%) - Proyecto Práctico Grupal  
+**Evaluación:** Evaluación Sumativa N°2 (25%) - Proyecto Práctico Grupal  
 **Versión de Entrega:** `v1.0`  
 **Integrantes del Equipo:**
 - Bastián Carrillo
