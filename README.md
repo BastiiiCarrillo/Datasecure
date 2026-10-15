@@ -6,7 +6,7 @@
 **Versión de Entrega:** `v1.0`  
 **Integrantes del Equipo:**
 - Bastián Carrillo
-- Juan
+- Juan Herrera
 - José León
 
 ---
