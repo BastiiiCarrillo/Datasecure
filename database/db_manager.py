@@ -22,6 +22,7 @@ def obtener_conexion():
             user=DB_USER,
             password=DB_PASSWORD,
             database=DB_NAME,
+            charset="utf8mb4",   # necesario para ñ y tildes
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True
         )
@@ -41,7 +42,7 @@ def inicializar_bd():
                 username VARCHAR(100) NOT NULL,
                 password VARCHAR(100) NOT NULL,
                 fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
+            ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
         """)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS usuarios_protegidos (
@@ -52,7 +53,7 @@ def inicializar_bd():
                 username_cifrado_aes TEXT,
                 password_hash_argon2 TEXT,
                 fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
+            ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
         """)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS auditoria (
@@ -60,7 +61,7 @@ def inicializar_bd():
                 accion VARCHAR(100) NOT NULL,
                 detalle TEXT NOT NULL,
                 fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
+            ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
         """)
     else:
         cursor.execute("""
@@ -158,9 +159,12 @@ def limpiar_usuarios_protegidos():
     conn.close()
 
 def obtener_registros_auditoria(limite: int = 50):
+    # Consulta parametrizada (nunca concatenar valores en el SQL)
+    limite = max(1, min(int(limite), 500))
+    marcador = "%s" if DB_TYPE == "mariadb" else "?"
     conn = obtener_conexion()
     cursor = conn.cursor()
-    cursor.execute(f"SELECT * FROM auditoria ORDER BY id DESC LIMIT {limite}")
+    cursor.execute(f"SELECT * FROM auditoria ORDER BY id DESC LIMIT {marcador}", (limite,))
     filas = cursor.fetchall()
     conn.close()
     return [dict(f) for f in filas]
