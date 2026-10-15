@@ -38,8 +38,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-inicializar_bd()
-cargar_datos_iniciales(forzar=False)
+db_error = None
+try:
+    inicializar_bd()
+    cargar_datos_iniciales(forzar=False)
+except Exception as e:
+    db_error = str(e)
 
 st.markdown("""
 <style>
@@ -108,7 +112,15 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-cuentas_ejemplo = obtener_usuarios_ficticios()
+if db_error:
+    st.error(f"⚠️ **Error de conexión a la Base de Datos ({DB_TYPE.upper()}):** {db_error}")
+    if DB_TYPE == "mariadb":
+        st.info("💡 **Para solucionar:** Inicia MariaDB en la MV con `sudo systemctl start mariadb` y carga las tablas con `sudo mysql < database/schema_mariadb.sql`")
+
+try:
+    cuentas_ejemplo = obtener_usuarios_ficticios()
+except Exception:
+    cuentas_ejemplo = []
 total_cuentas = len(cuentas_ejemplo)
 
 tab_ofuscacion, tab_database, tab_cripto, tab_auditoria = st.tabs([
@@ -329,14 +341,22 @@ with tab_database:
 
     with col_t1:
         st.subheader("Tabla: usuarios_ficticios (Originales)")
-        datos_orig = obtener_usuarios_ficticios()
+        try:
+            datos_orig = obtener_usuarios_ficticios()
+        except Exception as e:
+            datos_orig = []
+            st.error(f"Error al consultar usuarios_ficticios: {e}")
         if datos_orig:
             st.dataframe(pd.DataFrame(datos_orig)[["id", "username", "password", "fecha_creacion"]],
                          use_container_width=True)
 
     with col_t2:
         st.subheader("Tabla: usuarios_protegidos")
-        datos_prot = obtener_usuarios_protegidos()
+        try:
+            datos_prot = obtener_usuarios_protegidos()
+        except Exception as e:
+            datos_prot = []
+            st.error(f"Error al consultar usuarios_protegidos: {e}")
         if datos_prot:
             st.dataframe(
                 pd.DataFrame(datos_prot)[["id_original", "username_ofuscado", "password_ofuscado",
@@ -440,7 +460,11 @@ with tab_auditoria:
     if rol_seleccionado != "Administrador de Seguridad":
         st.warning("Acceso reservado para Administrador de Seguridad")
     else:
-        registros = obtener_registros_auditoria(limite=30)
+        try:
+            registros = obtener_registros_auditoria(limite=30)
+        except Exception as e:
+            registros = []
+            st.error(f"Error al consultar auditoria: {e}")
         if registros:
             st.dataframe(pd.DataFrame(registros)[["id", "fecha", "accion", "detalle"]],
                          use_container_width=True)
