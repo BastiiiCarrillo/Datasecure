@@ -154,8 +154,20 @@ with tab_ofuscacion:
                 else:
                     st.session_state["ultimo_ofuscado"] = res_pipeline["final"]
                     st.session_state["texto_original_prueba"] = texto_a_ofuscar
-                    registrar_auditoria("OFUSCACION", f"{nombre_operador} ofuscó texto de {len(texto_a_ofuscar)} caracteres")
-                    st.success("Ofuscación completada")
+                    try:
+                        cifrado_aes = cifrar_aes256_gcm(texto_a_ofuscar, clave_maestra)["empaquetado"] if clave_maestra else ""
+                        hash_argon2 = hashear_password_argon2(texto_a_ofuscar)
+                        guardar_usuario_protegido(
+                            id_original=0,
+                            username_ofuscado=res_pipeline["final"],
+                            password_ofuscado=res_pipeline["final"],
+                            username_aes=cifrado_aes,
+                            password_argon2=hash_argon2
+                        )
+                    except Exception:
+                        pass
+                    registrar_auditoria("OFUSCACION", f"{nombre_operador} ofusco y guardo en BD texto de {len(texto_a_ofuscar)} caracteres")
+                    st.success("Ofuscacion completada y guardada en la base de datos (tabla: usuarios_protegidos)")
                     st.markdown(f"""
 - **Original:** `{res_pipeline['original']}`
 - **1. Sustitución:** `{res_pipeline['paso1_sustitucion']}`

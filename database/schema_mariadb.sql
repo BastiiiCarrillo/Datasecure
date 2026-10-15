@@ -67,5 +67,25 @@ INSERT INTO usuarios_ficticios (username, password) VALUES
 
 INSERT INTO auditoria (accion, detalle) VALUES ('SEED_DATA', 'Carga inicial de cuentas ficticias (script SQL)');
 
--- Evidencia: consulta de los registros antes del procesamiento
+-- Guardado obligatorio de los datos ofuscados en la tabla usuarios_protegidos
+INSERT INTO usuarios_protegidos (id_original, username_ofuscado, password_ofuscado, username_cifrado_aes, password_hash_argon2) VALUES
+  (1, ' GIXwq4+bv}', ';,;hg RC1S{y:E', 'AES_GCM_ENCRYPTED_CARLOS', 'ARGON2ID_HASH_CARLOS'),
+  (2, '^xGv_7{k-A!', 'B%fhv54eb*::', 'AES_GCM_ENCRYPTED_ANA', 'ARGON2ID_HASH_ANA'),
+  (3, 'bflho_7hv7', 'Ben!o#S4e3137', 'AES_GCM_ENCRYPTED_ADMIN', 'ARGON2ID_HASH_ADMIN'),
+  (4, 'kvbo_qfsfa12', 'Kqfsfa&_99%', 'AES_GCM_ENCRYPTED_JUAN', 'ARGON2ID_HASH_JUAN'),
+  (5, 'tpgjb.dbtujmmp', 'T1g!b_Qbtt#8', 'AES_GCM_ENCRYPTED_SOFIA', 'ARGON2ID_HASH_SOFIA'),
+  (6, 'pqfsbeps_opsuf', 'Pq#Opsuf!5432', 'AES_GCM_ENCRYPTED_OPERADOR', 'ARGON2ID_HASH_OPERADOR'),
+  (7, 'ejfhp.tpuo', 'E2fh1*T1u1&35', 'AES_GCM_ENCRYPTED_DIEGO', 'ARGON2ID_HASH_DIEGO'),
+  (8, 'wbmfsjb_spkbt', 'W@m4s2b!003', 'AES_GCM_ENCRYPTED_VALERIA', 'ARGON2ID_HASH_VALERIA'),
+  (9, 'tjtufnb_bvejv', 'Bve!u#T2tu4n5_1', 'AES_GCM_ENCRYPTED_SISTEMA', 'ARGON2ID_HASH_SISTEMA'),
+  (10, 'dmbvejb_n', 'Dm@ve2b$3137?', 'AES_GCM_ENCRYPTED_CLAUDIA', 'ARGON2ID_HASH_CLAUDIA'),
+  (11, 'qfesq_~v~fa', ';,;hg RC1S{y:E', 'AES_GCM_ENCRYPTED_PEDRO', 'ARGON2ID_HASH_PEDRO');
+
+INSERT INTO auditoria (accion, detalle) VALUES ('PROCESAMIENTO_TOTAL', 'Carga inicial de registros ofuscados en usuarios_protegidos');
+
+-- Evidencia 1: consulta de los registros antes del procesamiento
 SELECT id, username, password FROM usuarios_ficticios ORDER BY id;
+
+-- Evidencia 2: consulta de los registros ofuscados guardados
+SELECT id, id_original, username_ofuscado, password_ofuscado FROM usuarios_protegidos ORDER BY id;
+
